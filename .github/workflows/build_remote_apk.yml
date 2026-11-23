@@ -1,0 +1,44 @@
+name: Build NMH Karaoke Android Remote APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-remote-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Prepare Android Remote Project
+        run: |
+          if [ -f main.dart ]; then mv -f main.dart lib/main.dart; fi
+          cp android/app/src/main/AndroidManifest.xml /tmp/AndroidManifest.xml
+          flutter create --platforms=android --project-name nmh_karaoke_remote .
+          cp /tmp/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="[^"]*"/android:label="NMH Karaoke Remote"/g' android/app/src/main/AndroidManifest.xml
+          flutter pub get
+          dart run flutter_launcher_icons
+
+      - name: Build Release APK
+        run: |
+          flutter build apk --release --split-per-abi
+
+      - name: Upload NMH Karaoke Remote APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: NMH_Karaoke_Remote_APK
+          path: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          
