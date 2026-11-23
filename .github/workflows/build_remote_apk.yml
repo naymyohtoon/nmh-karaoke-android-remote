@@ -25,9 +25,19 @@ jobs:
       - name: Prepare Android Remote Project
         run: |
           if [ -f main.dart ]; then mv -f main.dart lib/main.dart; fi
-          cp android/app/src/main/AndroidManifest.xml /tmp/AndroidManifest.xml
+          rm -rf android
           flutter create --platforms=android --project-name nmh_karaoke_remote .
-          cp /tmp/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+          python3 -c '
+          p = "android/app/src/main/AndroidManifest.xml"
+          s = open(p).read()
+          perms = """<uses-permission android:name="android.permission.INTERNET"/>
+              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+              <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+              <application"""
+          s = s.replace("<application", perms, 1)
+          s = s.replace("<application", "<application android:usesCleartextTraffic=\"true\"", 1)
+          open(p, "w").write(s)
+          '
           sed -i 's/android:label="[^"]*"/android:label="NMH Karaoke Remote"/g' android/app/src/main/AndroidManifest.xml
           flutter pub get
           dart run flutter_launcher_icons
@@ -41,4 +51,4 @@ jobs:
         with:
           name: NMH_Karaoke_Remote_APK
           path: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-          
+
