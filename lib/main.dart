@@ -517,25 +517,37 @@ class _RemoteHomeScreenState extends State<RemoteHomeScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Positioned.fill(
+                    Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Color(0xFFCBD5E1),
-                    Color(0xFF64748B),
                     Color(0xFF1E293B),
+                    Color(0xFF0F172A),
                   ],
-                  stops: [0.0, 0.45, 1.0],
                 ),
               ),
-              child: Column(
+              child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  _buildTopBar(),
-                  Expanded(child: _buildMainContent()),
-                  _buildBottomControlBar(),
+                  Positioned.fill(
+                    child: Opacity(
+                      opacity: 0.16,
+                      child: Image.asset(
+                        'assets/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      _buildTopBar(),
+                      Expanded(child: _buildMainContent()),
+                      _buildBottomControlBar(),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -618,18 +630,12 @@ class _RemoteHomeScreenState extends State<RemoteHomeScreen>
       child: Row(
         children: [
           if (isHome) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                width: 220,
-                height: 46,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: const Color(0xFFFFD166).withOpacity(0.65)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Image.asset('assets/logo.png', fit: BoxFit.fill),
-              ),
+                        Container(
+              width: 260,
+              height: 46,
+              alignment: Alignment.centerLeft,
+              child: Image.asset('assets/logo.png', fit: BoxFit.contain),
+            ),
             ),
             if (_currentSong != null) ...[
               const SizedBox(width: 8),
