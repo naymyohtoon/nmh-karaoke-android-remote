@@ -196,67 +196,94 @@ class _RemoteHomeScreenState extends State<RemoteHomeScreen>
     return [];
   }
 
-  void _showIpConnectDialog() {
+    void _showIpConnectDialog() {
     final controller = TextEditingController(text: _pcIp);
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => Dialog(
+        alignment: Alignment.topCenter,
+        insetPadding: const EdgeInsets.only(top: 14, left: 24, right: 24),
         backgroundColor: const Color(0xFF141E36),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: Color(0xFF00F5D4), width: 1.5),
         ),
-        title: const Text('PC Server IP ချိတ်ဆက်ရန်',
-            style: TextStyle(color: Color(0xFFFFD166), fontSize: 16)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'PC မျက်နှာပြင် ညာဘက်အပေါ်ထောင့်တွင် ပြထားသော IP Address ကို ရိုက်ထည့်ပါ (ဥပမာ - 192.168.1.50)',
-              style: TextStyle(color: Colors.white70, fontSize: 12),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: controller,
-              keyboardType: TextInputType.number,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.black45,
-                hintText: '192.168.1.xxx',
-                hintStyle: const TextStyle(color: Colors.white38),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Color(0xFF00F5D4)),
+        child: Container(
+          width: 460,
+          padding: const EdgeInsets.all(14),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('PC Server IP ချိတ်ဆက်ရန်',
+                    style: TextStyle(
+                        color: Color(0xFFFFD166),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(height: 6),
+                const Text(
+                  'PC မျက်နှာပြင် ညာဘက်အပေါ်ထောင့်တွင် ပြထားသော IP Address ကို ရိုက်ထည့်ပါ (ဥပမာ - 192.168.43.100)',
+                  style: TextStyle(color: Colors.white70, fontSize: 11),
                 ),
-              ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: controller,
+                        autofocus: true,
+                        keyboardType:
+                            const TextInputType.numberWithOptions(decimal: true),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 10),
+                          filled: true,
+                          fillColor: Colors.black45,
+                          hintText: '192.168.1.xxx',
+                          hintStyle: const TextStyle(color: Colors.white38),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF00F5D4)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('ပိတ်မည်',
+                          style: TextStyle(color: Colors.white54)),
+                    ),
+                    const SizedBox(width: 4),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF00F5D4)),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        _connectToPc(controller.text);
+                      },
+                      child: const Text('ချိတ်ဆက်မည်',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('ပိတ်မည်', style: TextStyle(color: Colors.white54)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00F5D4)),
-            onPressed: () {
-              Navigator.pop(ctx);
-              _connectToPc(controller.text);
-            },
-            child: const Text('ချိတ်ဆက်မည်',
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-          ),
-        ],
       ),
     );
   }
+
     @override
   void dispose() {
     _wsChannel?.sink.close();
