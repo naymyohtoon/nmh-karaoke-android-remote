@@ -627,7 +627,8 @@ class _RemoteHomeScreenState extends State<RemoteHomeScreen>
         color: Colors.black.withOpacity(0.65),
         border: Border.all(color: Colors.white.withOpacity(0.28), width: 1.2),
       ),
-                  ClipRRect(
+            if (isHome) ...[
+            ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: SizedBox(
                 width: 245,
