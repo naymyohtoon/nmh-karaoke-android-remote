@@ -636,7 +636,6 @@ class _RemoteHomeScreenState extends State<RemoteHomeScreen>
               alignment: Alignment.centerLeft,
               child: Image.asset('assets/logo.png', fit: BoxFit.contain),
             ),
-            ),
             if (_currentSong != null) ...[
               const SizedBox(width: 8),
               Expanded(
