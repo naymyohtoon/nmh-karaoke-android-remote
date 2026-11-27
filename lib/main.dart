@@ -627,14 +627,13 @@ class _RemoteHomeScreenState extends State<RemoteHomeScreen>
         color: Colors.black.withOpacity(0.65),
         border: Border.all(color: Colors.white.withOpacity(0.28), width: 1.2),
       ),
-      child: Row(
-        children: [
-          if (isHome) ...[
-                        Container(
-              width: 260,
-              height: 46,
-              alignment: Alignment.centerLeft,
-              child: Image.asset('assets/logo.png', fit: BoxFit.contain),
+                  ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                width: 245,
+                height: 46,
+                child: Image.asset('assets/logo.png', fit: BoxFit.fill),
+              ),
             ),
             if (_currentSong != null) ...[
               const SizedBox(width: 8),
